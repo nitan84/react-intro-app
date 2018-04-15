@@ -49,6 +49,58 @@ class Board extends React.Component {
     }
 }
 
+class GameInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isAscending: true
+        };
+    }
+
+    handleToggleClick() {
+       this.setState({
+           isAscending: !this.state.isAscending
+       }) 
+    }
+
+    render() {
+        const history = this.props.history;
+        const currentMove = this.props.move;
+        const current = history[currentMove];
+        const xIsNext = current.xIsNext;
+        const winner = calculateWinner(current.squares);
+
+        const moves = history.map((step, move) => {
+            const position = step.position;
+    
+            const desc = move ?
+                `Go to move #${move} (${getCol(position)}, ${getRow(position)})` :
+                'Go to game start';
+            return (
+                <li key={move}>
+                    <button style={currentMove === move ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}
+                        onClick={() => this.jumpTo(move)}>{desc}</button>
+                </li>
+            );
+        });
+    
+        let status;
+        if (winner) {
+            status = `Winner: ${winner}`;
+        } else {
+            status = `Next player: ${xIsNext ? 'X' : 'O'}`
+        }
+
+        return (
+        <div>
+            <div>{status}</div>
+            Sort Order: <button onClick={() => this.handleToggleClick()}>{this.state.isAscending ? 'ASC' : 'DESC'}</button>
+            <ol>{this.state.isAscending ? moves : moves.reverse()}</ol>
+        </div>
+        );
+    }
+}
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -105,29 +157,6 @@ class Game extends React.Component {
         const history = this.state.history;
         const currentMove = this.state.move;
         const current = history[currentMove];
-        const xIsNext = current.xIsNext;
-        const winner = calculateWinner(current.squares);
-
-        const moves = history.map((step, move) => {
-            const position = step.position;
-
-            const desc = move ?
-                `Go to move #${move} (${getCol(position)}, ${getRow(position)})` :
-                'Go to game start';
-            return (
-                <li key={move}>
-                    <button style={currentMove === move ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}
-                        onClick={() => this.jumpTo(move)}>{desc}</button>
-                </li>
-            );
-        });
-
-        let status;
-        if (winner) {
-            status = `Winner: ${winner}`;
-        } else {
-            status = `Next player: ${xIsNext ? 'X' : 'O'}`
-        }
 
         return (
             <div className="game">
@@ -135,8 +164,7 @@ class Game extends React.Component {
                     <Board squares={current.squares} onClick={(i) => this.handleClick(i)} />
                 </div>
                 <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <GameInfo history={history} move={currentMove}/>
                 </div>
             </div>
         );
