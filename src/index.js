@@ -19,25 +19,32 @@ class Board extends React.Component {
         );
     }
 
+    renderRow(index) {
+        let offset = index * 3;
+        let rows = [];
+
+        for (let i = 0; i <= 2; i++) {
+            rows.push(this.renderSquare(offset + i));
+        }
+
+        return <div className="board-row">
+            {rows}
+        </div>
+    }
+
+    renderBoard() {
+        let board = [];
+
+        for (let i = 0; i <= 2; i++) {
+            board.push(this.renderRow(i));
+        }
+
+        return board;
+    }
+
     render() {
         return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
+            <div>{this.renderBoard()}</div>
         );
     }
 }
@@ -109,8 +116,8 @@ class Game extends React.Component {
                 'Go to game start';
             return (
                 <li key={move}>
-                    <button style={currentMove === move ? { fontWeight: 'bold' } : { fontWeight: 'normal' }} 
-                            onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button style={currentMove === move ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}
+                        onClick={() => this.jumpTo(move)}>{desc}</button>
                 </li>
             );
         });
