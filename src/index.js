@@ -82,7 +82,7 @@ class Game extends React.Component {
                 xIsNext: !xIsNext,
                 position: i
             }]),
-            move: move + 1 
+            move: move + 1
         }
 
         this.setState(state);
@@ -103,16 +103,17 @@ class Game extends React.Component {
 
         const moves = history.map((step, move) => {
             const position = step.position;
-            
+
             const desc = move ?
-              `Go to move #${move} (${getCol(position)}, ${getRow(position)})` :
-              'Go to game start';
+                `Go to move #${move} (${getCol(position)}, ${getRow(position)})` :
+                'Go to game start';
             return (
-              <li key={move}>
-                <button onClick={() => this.jumpTo(move)}>{desc}</button>
-              </li>
+                <li key={move}>
+                    <button style={currentMove === move ? { fontWeight: 'bold' } : { fontWeight: 'normal' }} 
+                            onClick={() => this.jumpTo(move)}>{desc}</button>
+                </li>
             );
-          });
+        });
 
         let status;
         if (winner) {
