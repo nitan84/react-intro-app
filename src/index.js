@@ -48,32 +48,55 @@ class Game extends React.Component {
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
+                xIsNext: true
             }],
-            xIsNext: true
+            move: 0
         };
     }
 
     handleClick(i) {
         const history = this.state.history;
-        const current = history[history.length - 1];
+        const move = this.state.move;
+        const current = history[move];
+        const xIsNext = history[move].xIsNext;
         const squares = current.squares.slice();
 
         if (calculateWinner(squares) || squares[i]) {
             return;
         }
 
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-            history: history.concat([{
+        squares[i] = xIsNext ? 'X' : 'O';
+
+        let updatedHistory = history;
+
+        if (move < history.length - 1) {
+            const indexToRemove = move + 1;
+            const numberToRemove = history.length - indexToRemove;
+            updatedHistory.splice(indexToRemove, numberToRemove);
+        }
+
+        const state = {
+            history: updatedHistory.concat([{
                 squares: squares,
+                xIsNext: !xIsNext,
             }]),
-            xIsNext: !this.state.xIsNext,
+            move: move + 1 
+        }
+
+        this.setState(state);
+    }
+
+    jumpTo(move) {
+        this.setState({
+            move: move
         });
     }
 
     render() {
         const history = this.state.history;
-        const current = history[history.length - 1];
+        const currentMove = this.state.move;
+        const current = history[currentMove];
+        const xIsNext = history[currentMove].xIsNext;
         const winner = calculateWinner(current.squares);
 
         const moves = history.map((step, move) => {
@@ -91,7 +114,7 @@ class Game extends React.Component {
         if (winner) {
             status = `Winner: ${winner}`;
         } else {
-            status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`
+            status = `Next player: ${xIsNext ? 'X' : 'O'}`
         }
 
         return (
