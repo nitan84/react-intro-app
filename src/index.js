@@ -4,7 +4,7 @@ import './index.css';
 
 function Square(props) {
     return (
-        <button className="square" onClick={props.onClick}>
+        <button className={`square ${props.highlight}`} onClick={props.onClick}>
             {props.value}
         </button>
     );
@@ -12,9 +12,12 @@ function Square(props) {
 
 class Board extends React.Component {
     renderSquare(i) {
+        const winnerPattern = this.props.winner;
+        const highlight = (winnerPattern && winnerPattern.includes(i)) ? 'highlight' : null; 
         return (
             <Square
                 value={this.props.squares[i]}
+                highlight ={highlight}
                 onClick={() => this.props.onClick(i)} />
         );
     }
@@ -86,7 +89,7 @@ class GameInfo extends React.Component {
     
         let status;
         if (winner) {
-            status = `Winner: ${winner}`;
+            status = `Winner: ${xIsNext ? 'O' : 'X'}`;
         } else {
             status = `Next player: ${xIsNext ? 'X' : 'O'}`
         }
@@ -157,11 +160,12 @@ class Game extends React.Component {
         const history = this.state.history;
         const currentMove = this.state.move;
         const current = history[currentMove];
+        const winner = calculateWinner(current.squares);
 
         return (
             <div className="game">
                 <div className="game-board">
-                    <Board squares={current.squares} onClick={(i) => this.handleClick(i)} />
+                    <Board squares={current.squares} winner={winner} onClick={(i) => this.handleClick(i)} />
                 </div>
                 <div className="game-info">
                     <GameInfo history={history} move={currentMove}/>
@@ -192,7 +196,7 @@ function calculateWinner(squares) {
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            return lines[i];
         }
     }
     return null;
