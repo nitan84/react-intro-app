@@ -1,9 +1,11 @@
 
 # Tic Tac Toe
 
-React Tutorial for building an interactive tic-tac-toe game. (https://reactjs.org/tutorial/tutorial.html)
+[React Tutorial](https://reactjs.org/tutorial/tutorial.html) for building an interactive tic-tac-toe game. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+Working demo here: 
+> https://stark-wave-39639.herokuapp.com/
+
 
 ## Getting Started
 
@@ -37,7 +39,11 @@ npm start
 
 ## Deployment
 
-Deploy to heroku. https://stark-wave-39639.herokuapp.com/
+Deploy to heroku
 ```
 git push heroku master
 ```
+
+## Built With
+
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
