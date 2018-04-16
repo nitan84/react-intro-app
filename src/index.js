@@ -90,6 +90,9 @@ class GameInfo extends React.Component {
         let status;
         if (winner) {
             status = `Winner: ${xIsNext ? 'O' : 'X'}`;
+        }
+        else if (currentMove === 9) {
+            status = `Draw!`
         } else {
             status = `Next player: ${xIsNext ? 'X' : 'O'}`
         }
