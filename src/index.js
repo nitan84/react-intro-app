@@ -13,11 +13,11 @@ function Square(props) {
 class Board extends React.Component {
     renderSquare(i) {
         const winnerPattern = this.props.winner;
-        const highlight = (winnerPattern && winnerPattern.includes(i)) ? 'highlight' : null; 
+        const highlight = (winnerPattern && winnerPattern.includes(i)) ? 'highlight' : null;
         return (
             <Square
                 value={this.props.squares[i]}
-                highlight ={highlight}
+                highlight={highlight}
                 onClick={() => this.props.onClick(i)} />
         );
     }
@@ -61,9 +61,9 @@ class GameInfo extends React.Component {
     }
 
     handleToggleClick() {
-       this.setState({
-           isAscending: !this.state.isAscending
-       }) 
+        this.setState({
+            isAscending: !this.state.isAscending
+        })
     }
 
     render() {
@@ -75,18 +75,18 @@ class GameInfo extends React.Component {
 
         const moves = history.map((step, move) => {
             const position = step.position;
-    
+
             const desc = move ?
                 `Go to move #${move} (${getCol(position)}, ${getRow(position)})` :
                 'Go to game start';
             return (
                 <li key={move}>
                     <button style={currentMove === move ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}
-                        onClick={() => this.jumpTo(move)}>{desc}</button>
+                        onClick={() => this.props.onClick(move)}>{desc}</button>
                 </li>
             );
         });
-    
+
         let status;
         if (winner) {
             status = `Winner: ${xIsNext ? 'O' : 'X'}`;
@@ -95,11 +95,11 @@ class GameInfo extends React.Component {
         }
 
         return (
-        <div>
-            <div>{status}</div>
-            Sort Order: <button onClick={() => this.handleToggleClick()}>{this.state.isAscending ? 'ASC' : 'DESC'}</button>
-            <ol>{this.state.isAscending ? moves : moves.reverse()}</ol>
-        </div>
+            <div>
+                <div>{status}</div>
+                Sort Order: <button onClick={() => this.handleToggleClick()}>{this.state.isAscending ? 'ASC' : 'DESC'}</button>
+                <ol>{this.state.isAscending ? moves : moves.reverse()}</ol>
+            </div>
         );
     }
 }
@@ -168,7 +168,7 @@ class Game extends React.Component {
                     <Board squares={current.squares} winner={winner} onClick={(i) => this.handleClick(i)} />
                 </div>
                 <div className="game-info">
-                    <GameInfo history={history} move={currentMove}/>
+                    <GameInfo history={history} move={currentMove} onClick={(i) => this.jumpTo(i)} />
                 </div>
             </div>
         );
